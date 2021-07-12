@@ -40,6 +40,13 @@
       }
     ]
   },
+  "entity.soul.teleport": {
+    "subtitle": "requiem:subtitles.entity.soul.teleport",
+    "sounds": [
+      "mob/endermen/portal",
+      "mob/endermen/portal2"
+    ]
+  },
   "item.opus.use": {
     "subtitle": "requiem:subtitles.item.opus.use",
     "sounds": [

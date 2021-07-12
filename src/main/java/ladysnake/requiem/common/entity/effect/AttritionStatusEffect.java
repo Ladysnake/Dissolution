@@ -56,20 +56,27 @@ public class AttritionStatusEffect extends StatusEffect implements StickyStatusE
         this.setBypassesArmor();
         this.setOutOfWorld();
     }};
+    public static final int MAX_LEVEL = 3;
+    public static final int DEFAULT_DURATION = 300;
 
     public static void apply(PlayerEntity target) {
         apply(target, target.world.getLevelProperties().isHardcore() ? 2 : 1);
     }
 
     public static void apply(LivingEntity target, @Nonnegative int amount) {
+        apply(target, amount, DEFAULT_DURATION);
+    }
+
+    public static void apply(LivingEntity target, @Nonnegative int amount, int minDuration) {
         Preconditions.checkArgument(amount > 0);
 
         StatusEffectInstance attrition = target.getStatusEffect(RequiemStatusEffects.ATTRITION);
         int expectedAmplifier = attrition == null ? amount - 1 : attrition.getAmplifier() + amount;
-        int amplifier = Math.min(3, expectedAmplifier);
-        addAttrition(target, amplifier);
+        int amplifier = Math.min(MAX_LEVEL, expectedAmplifier);
+        int duration = Math.max(attrition == null ? 0 : attrition.getDuration(), minDuration);
+        addAttrition(target, amplifier, duration);
 
-        if (expectedAmplifier > 3 && (!(target instanceof PlayerEntity) || target.world.getLevelProperties().isHardcore())) {
+        if (expectedAmplifier > MAX_LEVEL && (!(target instanceof PlayerEntity) || target.world.getLevelProperties().isHardcore())) {
             if (target instanceof PlayerEntity) {
                 RemnantComponent.get((PlayerEntity) target).become(RemnantTypes.MORTAL);
             }
@@ -77,10 +84,10 @@ public class AttritionStatusEffect extends StatusEffect implements StickyStatusE
         }
     }
 
-    public static void addAttrition(LivingEntity target, int amplifier) {
+    public static void addAttrition(LivingEntity target, int amplifier, int duration) {
         target.addStatusEffect(new StatusEffectInstance(
             RequiemStatusEffects.ATTRITION,
-            300,
+            duration,
             amplifier,
             false,
             false,
@@ -101,7 +108,7 @@ public class AttritionStatusEffect extends StatusEffect implements StickyStatusE
             .ifPresent(r -> r.definitivelyClear(RequiemStatusEffects.ATTRITION));
 
         if (amplifier >= 0) {
-            addAttrition(target, amplifier);
+            addAttrition(target, amplifier, DEFAULT_DURATION);
         }
     }
 
@@ -111,7 +118,7 @@ public class AttritionStatusEffect extends StatusEffect implements StickyStatusE
 
     @Override
     public double adjustModifierAmount(int amplifier, EntityAttributeModifier entityAttributeModifier) {
-        return super.adjustModifierAmount(Math.min(amplifier, 3), entityAttributeModifier);
+        return super.adjustModifierAmount(Math.min(amplifier, MAX_LEVEL), entityAttributeModifier);
     }
 
     @Override

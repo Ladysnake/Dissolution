@@ -57,6 +57,7 @@ public class CureParticle extends SpriteBillboardParticle {
     }
 
     // Taken from DragonBreathParticle
+    @Override
     public void tick() {
         this.prevPosX = this.x;
         this.prevPosY = this.y;
@@ -90,15 +91,18 @@ public class CureParticle extends SpriteBillboardParticle {
         }
     }
 
+    @Override
     public ParticleTextureSheet getType() {
         return ParticleTextureSheet.PARTICLE_SHEET_OPAQUE;
     }
 
+    @Override
     public float getSize(float tickDelta) {
         return this.scale * MathHelper.clamp((this.age + tickDelta) / this.maxAge * 32.0F, 0.0F, 1.0F);
     }
 
     // taken from FlameParticle
+    @Override
     public int getBrightness(float tickDelta) {
         float progress = ((float)this.age + tickDelta) / (float)this.maxAge;
         progress = MathHelper.clamp(progress, 0.0F, 1.0F);
@@ -120,6 +124,7 @@ public class CureParticle extends SpriteBillboardParticle {
             this.spriteProvider = spriteProvider;
         }
 
+        @Override
         public Particle createParticle(DefaultParticleType parameters, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
             CureParticle particle = new CureParticle(world, x, y, z, velocityX, velocityY, velocityZ);
             particle.setSpriteForAge(spriteProvider);

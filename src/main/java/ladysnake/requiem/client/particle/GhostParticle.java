@@ -101,7 +101,7 @@ public final class GhostParticle extends AbstractSlowingParticle {
 
     public boolean isColliding() {
         return this.world.hasBlockCollision(null, this.getBoundingBox(),
-            (blockState, blockPosx) -> blockState.shouldSuffocate(this.world, blockPosx));
+            (state, pos) -> state.shouldSuffocate(this.world, pos));
     }
 
     @Override

@@ -38,8 +38,8 @@ import ladysnake.requiem.api.v1.event.requiem.PossessionEvents;
 import ladysnake.requiem.api.v1.possession.Possessable;
 import ladysnake.requiem.api.v1.possession.PossessionComponent;
 import ladysnake.requiem.core.RequiemCore;
+import ladysnake.requiem.core.entity.EntityAiToggle;
 import ladysnake.requiem.core.entity.VariableMobilityEntity;
-import ladysnake.requiem.core.entity.ai.DisableableBrain;
 import ladysnake.requiem.core.entity.attribute.CooldownStrengthModifier;
 import ladysnake.requiem.core.entity.attribute.NonDeterministicAttribute;
 import ladysnake.requiem.core.mixin.access.LivingEntityAccessor;
@@ -171,7 +171,7 @@ public abstract class PossessableLivingEntityMixin extends Entity implements Pos
 
         this.possessor = possessor;
 
-        ((DisableableBrain) this.getBrain()).requiem_setDisabled(this.possessor != null);
+        EntityAiToggle.KEY.get(this).toggleAi(RequiemCore.POSSESSION_MECHANISM_ID, this.possessor != null, false);
 
         EntityAttributeInstance speedAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         speedAttribute.removeModifier(RequiemCore.INHERENT_MOB_SLOWNESS_UUID);
@@ -198,13 +198,13 @@ public abstract class PossessableLivingEntityMixin extends Entity implements Pos
     * * * * * * * * * * */
 
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;canMoveVoluntarily()Z", ordinal = 1))
-    private void requiem_mobTick(CallbackInfo ci) {
+    private void requiem$mobTick(CallbackInfo ci) {
         if (this.isBeingPossessed() && !world.isClient) {
-            this.requiem_mobTick();
+            this.requiem$mobTick();
         }
     }
 
-    protected void requiem_mobTick() {
+    protected void requiem$mobTick() {
         // NO-OP
     }
 

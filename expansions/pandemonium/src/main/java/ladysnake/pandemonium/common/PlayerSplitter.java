@@ -42,16 +42,16 @@ import dev.onyxstudios.cca.internal.base.AbstractComponentContainer;
 import dev.onyxstudios.cca.internal.entity.SwitchablePlayerEntity;
 import io.github.ladysnake.impersonate.Impersonator;
 import ladysnake.pandemonium.Pandemonium;
-import ladysnake.pandemonium.api.anchor.FractureAnchor;
-import ladysnake.pandemonium.api.anchor.FractureAnchorManager;
 import ladysnake.pandemonium.common.entity.PandemoniumEntities;
 import ladysnake.pandemonium.common.entity.PlayerShellEntity;
-import ladysnake.pandemonium.common.impl.anchor.AnchorFactories;
 import ladysnake.pandemonium.common.remnant.PlayerBodyTracker;
 import ladysnake.requiem.api.v1.entity.InventoryLimiter;
 import ladysnake.requiem.api.v1.event.requiem.PlayerShellEvents;
+import ladysnake.requiem.api.v1.record.GlobalRecord;
+import ladysnake.requiem.api.v1.record.GlobalRecordKeeper;
 import ladysnake.requiem.api.v1.remnant.RemnantComponent;
 import ladysnake.requiem.common.remnant.RemnantTypes;
+import ladysnake.requiem.core.record.EntityPositionClerk;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
@@ -82,16 +82,19 @@ public final class PlayerSplitter {
     }
 
     private static void doSplit(ServerPlayerEntity whole) {
-        FractureAnchorManager anchorManager = FractureAnchorManager.get(whole.world);
         PlayerShellEntity shell = createShell(whole);
         Entity mount = whole.getVehicle();
         ServerPlayerEntity soul = performRespawn(whole);
         soul.world.spawnEntity(shell);
         if (mount != null) shell.startRiding(mount);
-        FractureAnchor anchor = anchorManager.addAnchor(AnchorFactories.fromEntityUuid(shell.getUuid()));
-        anchor.setPosition(shell.getX(), shell.getY(), shell.getZ());
-        PlayerBodyTracker.get(soul).setAnchor(anchor);
+        setupRecord(whole, shell, soul);
         PlayerShellEvents.PLAYER_SPLIT.invoker().onPlayerSplit(whole, soul, shell);
+    }
+
+    private static void setupRecord(ServerPlayerEntity whole, PlayerShellEntity shell, ServerPlayerEntity soul) {
+        GlobalRecord anchor = GlobalRecordKeeper.get(whole.world).createRecord();
+        EntityPositionClerk.get(shell).linkWith(anchor);
+        PlayerBodyTracker.get(soul).setAnchor(anchor);
     }
 
     public static PlayerShellEntity createShell(ServerPlayerEntity whole) {

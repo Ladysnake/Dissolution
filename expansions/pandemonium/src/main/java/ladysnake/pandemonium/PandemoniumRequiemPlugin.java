@@ -113,7 +113,7 @@ public class PandemoniumRequiemPlugin implements RequiemPlugin {
                     PlayerSplitter.merge((PlayerShellEntity) targetedEntity, player);
                     RequiemNetworking.sendBodyCureMessage(player);
                     success = true;
-                } else if (PlayerBodyTracker.get(player).getAnchor() != null) {
+                } else if (PlayerBodyTracker.get(player).getAnchor().isPresent()) {
                     possessionComponent.stopPossessing();
                     success = true;
                 } else {

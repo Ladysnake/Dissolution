@@ -34,18 +34,29 @@
  */
 package ladysnake.pandemonium.common.entity.ai.brain;
 
+import com.mojang.serialization.Codec;
 import ladysnake.pandemonium.Pandemonium;
 import ladysnake.pandemonium.mixin.common.entity.ai.MemoryModuleTypeAccessor;
+import ladysnake.pandemonium.mixin.common.entity.ai.SerializableMemoryModuleTypeAccessor;
+import ladysnake.requiem.api.v1.record.EntityPointer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.util.dynamic.DynamicSerializableUuid;
 
 import java.util.List;
+import java.util.UUID;
 
-public class PandemoniumMemoryModules {
+public final class PandemoniumMemoryModules {
+    public static final MemoryModuleType<EntityPointer> GLOBAL_ENTITY_POS = register("global_entity_pos", EntityPointer.CODEC);
+    public static final MemoryModuleType<UUID> LINKED_ENTITY = register("linked_entity", DynamicSerializableUuid.CODEC);
     public static final MemoryModuleType<Integer> GO_HOME_ATTEMPTS = register("pathfinding_failures");
     public static final MemoryModuleType<List<LivingEntity>> VISIBLE_HOSTILES = register("visible_hostiles");
 
     private static <U> MemoryModuleType<U> register(String id) {
         return MemoryModuleTypeAccessor.pandemonium$register(Pandemonium.MOD_ID + ":" + id);
+    }
+
+    private static <U> MemoryModuleType<U> register(String id, Codec<U> codec) {
+        return SerializableMemoryModuleTypeAccessor.pandemonium$register(Pandemonium.MOD_ID + ":" + id, codec);
     }
 }

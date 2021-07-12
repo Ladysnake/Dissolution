@@ -13,6 +13,7 @@
     "opus.EditBookScreenAccessor",
     "opus.LecternScreenMixin",
     "opus.WrittenBookScreenContentsMixin",
+    "particle.ParticleManagerMixin",
     "possession.ArmorFeatureRendererMixin",
     "possession.ClientEntityMixin",
     "possession.EntityRenderDispatcherMixin",

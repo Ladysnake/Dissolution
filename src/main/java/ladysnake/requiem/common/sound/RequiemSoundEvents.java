@@ -39,13 +39,14 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class RequiemSoundEvents {
+public final class RequiemSoundEvents {
     public static final SoundEvent EFFECT_BECOME_MORTAL = register("effect.become.mortal");
     public static final SoundEvent EFFECT_BECOME_REMNANT = register("effect.become.remnant");
     public static final SoundEvent EFFECT_PHASE = register("effect.phase");
     public static final SoundEvent EFFECT_POSSESSION_ATTEMPT = register("effect.possession.attempt");
     public static final SoundEvent EFFECT_RECLAMATION_CLEAR = register("effect.reclamation.clear");
     public static final SoundEvent EFFECT_TIME_STOP = register("effect.time.stop");
+    public static final SoundEvent ENTITY_SOUL_TELEPORT = register("entity.soul.teleport");
     public static final SoundEvent ITEM_OPUS_USE = register("item.opus.use");
 
     private static SoundEvent register(String name) {

@@ -54,6 +54,7 @@ import ladysnake.requiem.api.v1.event.requiem.ConsumableItemEvents;
 import ladysnake.requiem.api.v1.event.requiem.HumanityCheckCallback;
 import ladysnake.requiem.api.v1.event.requiem.PossessionStateChangeCallback;
 import ladysnake.requiem.api.v1.event.requiem.RemnantStateChangeCallback;
+import ladysnake.requiem.api.v1.event.requiem.SoulCaptureEvents;
 import ladysnake.requiem.api.v1.possession.PossessedData;
 import ladysnake.requiem.api.v1.possession.PossessionComponent;
 import ladysnake.requiem.api.v1.possession.item.PossessionItemAction;
@@ -123,6 +124,7 @@ import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import static ladysnake.requiem.common.remnant.RemnantTypes.MORTAL;
 
@@ -160,6 +162,7 @@ public final class VanillaRequiemPlugin implements RequiemPlugin {
         });
         HumanityCheckCallback.EVENT.register(possessedEntity -> EnchantmentHelper.getEquipmentLevel(RequiemEnchantments.HUMANITY, possessedEntity));
         ConsumableItemEvents.POST_CONSUMED.register(RequiemCriteria.USED_TOTEM::trigger);
+        SoulCaptureEvents.BEFORE_ATTEMPT.register((player, target) -> Optional.ofNullable(player.getStatusEffect(RequiemStatusEffects.ATTRITION)).map(StatusEffectInstance::getAmplifier).orElse(-1) < 3);
     }
 
     private void registerEtherealEventHandlers() {

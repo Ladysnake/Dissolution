@@ -64,7 +64,10 @@
   "requiem:subtitles.effect.phasing": "Player phasing",
   "requiem:subtitles.effect.possession.attempt": "Possession Attempt",
   "requiem:subtitles.effect.time.stop": "ZA WARUDO! TOKI WO TOMARE",
+  "requiem:subtitles.entity.soul.teleport": "Soul teleports away",
   "requiem:subtitles.item.soul_vessel.use": "Soul Vessel Activates",
+
+  "requiem:tooltip.filled_vessel": "Soul fragments from a %s",
 
   "requiem:tooltip.ammo_generator": "Ammo Generation",
   "requiem:tooltip.bolt_hoarder": "Bolt Hoarder",
@@ -135,6 +138,9 @@
 
   "item.requiem.totem_of_skeletonization": "Totem of Skeletonization",
   "item.requiem.opus_daemonium": "Opus Daemonium",
+  "item.requiem.empty_soul_vessel": "Empty Soul Vessel",
+  "item.requiem.filled_soul_vessel": "Filled Soul Vessel",
+  "item.requiem.shattered_soul_vessel": "Shattered Soul Vessel",
   "item.requiem.soul_vessel": "Soul Vessel",
   "item.requiem.ominous_soul_vessel": "Ominous Soul Vessel",
   "item.requiem.baleful_soul_vessel": "Baleful Soul Vessel",

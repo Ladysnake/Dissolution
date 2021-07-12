@@ -38,15 +38,19 @@ import ladysnake.requiem.Requiem;
 import ladysnake.requiem.api.v1.annotation.CalledThroughReflection;
 import ladysnake.requiem.client.network.ClientMessageHandler;
 import ladysnake.requiem.client.particle.CureParticle;
+import ladysnake.requiem.client.particle.EntityDustParticle;
 import ladysnake.requiem.client.particle.GhostParticle;
+import ladysnake.requiem.client.particle.wisp.WispTrailParticle;
 import ladysnake.requiem.client.render.entity.CuredPiglinEntityRenderer;
 import ladysnake.requiem.client.render.entity.CuredVillagerEntityRenderer;
+import ladysnake.requiem.client.render.entity.WillOWispEntityRenderer;
+import ladysnake.requiem.client.render.entity.model.WillOWispModel;
 import ladysnake.requiem.common.entity.RequiemEntities;
 import ladysnake.requiem.common.entity.effect.RequiemStatusEffects;
 import ladysnake.requiem.common.particle.RequiemParticleTypes;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.PortalParticle;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.util.Identifier;
@@ -66,8 +70,6 @@ public final class RequiemClient {
     public static RequiemClient instance() {
         return INSTANCE;
     }
-
-    private final MinecraftClient mc = MinecraftClient.getInstance();
 
     private final ClientMessageHandler messageHandler;
     private final RequiemClientListener listener;
@@ -107,6 +109,7 @@ public final class RequiemClient {
     }
 
     private void init() {
+        this.registerEntityModels();
         this.registerEntityRenderers();
         this.registerModelPredicates();
         this.registerParticleFactories();
@@ -116,9 +119,12 @@ public final class RequiemClient {
     }
 
     private void registerParticleFactories() {
-        ParticleFactoryRegistry.getInstance().register(RequiemParticleTypes.GHOST, GhostParticle.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(RequiemParticleTypes.ATTRITION, PortalParticle.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(RequiemParticleTypes.CURE, CureParticle.Factory::new);
+        ParticleFactoryRegistry registry = ParticleFactoryRegistry.getInstance();
+        registry.register(RequiemParticleTypes.ATTRITION, PortalParticle.Factory::new);
+        registry.register(RequiemParticleTypes.CURE, CureParticle.Factory::new);
+        registry.register(RequiemParticleTypes.GHOST, GhostParticle.Factory::new);
+        registry.register(RequiemParticleTypes.ENTITY_DUST, new EntityDustParticle.Factory());
+        registry.register(RequiemParticleTypes.SOUL_TRAIL, WispTrailParticle.Factory::new);
     }
 
     private void registerModelPredicates() {
@@ -128,7 +134,12 @@ public final class RequiemClient {
         this.statusEffectSpriteManager().registerAltSprites(RequiemStatusEffects.ATTRITION, 4);
     }
 
+    private void registerEntityModels() {
+        EntityModelLayerRegistry.registerModelLayer(WillOWispModel.MODEL_LAYER, WillOWispModel::getTexturedModelData);
+    }
+
     private void registerEntityRenderers() {
+        EntityRendererRegistry.INSTANCE.register(RequiemEntities.RELEASED_SOUL, WillOWispEntityRenderer::new);
         EntityRendererRegistry.INSTANCE.register(RequiemEntities.CURED_VILLAGER, CuredVillagerEntityRenderer::new);
         EntityRendererRegistry.INSTANCE.register(RequiemEntities.CURED_PIGLIN, (ctx) -> new CuredPiglinEntityRenderer(ctx, EntityModelLayers.PIGLIN, EntityModelLayers.PIGLIN_INNER_ARMOR, EntityModelLayers.PIGLIN_OUTER_ARMOR, false));
         EntityRendererRegistry.INSTANCE.register(RequiemEntities.CURED_PIGLIN_BRUTE, (ctx) -> new CuredPiglinEntityRenderer(ctx, EntityModelLayers.PIGLIN_BRUTE, EntityModelLayers.PIGLIN_BRUTE_INNER_ARMOR, EntityModelLayers.PIGLIN_BRUTE_OUTER_ARMOR, false));

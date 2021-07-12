@@ -46,7 +46,11 @@
       "requiem:haema_holder",
       "requiem:attrition_focus",
       "requiem:effect_reapplicator",
-      "requiem:curable"
+      "requiem:curable",
+      "requiem:ai_toggle",
+      "requiem:global_record_keeper",
+      "requiem:entity_clerk",
+      "requiem:body_tracker"
     ]
   }
 }

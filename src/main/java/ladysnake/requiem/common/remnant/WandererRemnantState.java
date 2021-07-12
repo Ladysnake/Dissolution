@@ -93,18 +93,22 @@ public class WandererRemnantState extends MutableRemnantState {
             AttritionFocus.KEY.get(body).addAttrition(this.player.getUuid(), 1);
             AttritionStatusEffect.reduce(player, 1);
 
-            player.getServerWorld().spawnParticles(
-                RequiemParticleTypes.ATTRITION,
-                body.getX(),
-                body.getBodyY(0.5),
-                body.getZ(),
-                60,
-                body.getWidth() * 0.8,
-                body.getHeight() * 0.6,
-                body.getWidth() *0.8,
-                1.0
-            );
+            spawnAttritionParticles(player, body);
         }
+    }
+
+    public static void spawnAttritionParticles(ServerPlayerEntity player, LivingEntity body) {
+        player.getServerWorld().spawnParticles(
+            RequiemParticleTypes.ATTRITION,
+            body.getX(),
+            body.getBodyY(0.5),
+            body.getZ(),
+            60,
+            body.getWidth() * 0.8,
+            body.getHeight() * 0.6,
+            body.getWidth() *0.8,
+            1.0
+        );
     }
 
     @Override

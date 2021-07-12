@@ -64,8 +64,10 @@ import ladysnake.requiem.common.remnant.RemnantComponentImpl;
 import ladysnake.requiem.common.remnant.SimpleAttritionFocus;
 import ladysnake.requiem.core.ability.ImmutableMobAbilityController;
 import ladysnake.requiem.core.ability.PlayerAbilityController;
+import ladysnake.requiem.core.entity.EntityAiToggle;
 import ladysnake.requiem.core.possession.PossessionComponentImpl;
 import ladysnake.requiem.core.remnant.RevivingDeathSuspender;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.ZombieVillagerEntity;
 import net.minecraft.entity.mob.ZombifiedPiglinEntity;
@@ -91,6 +93,7 @@ public final class RequiemComponents implements EntityComponentInitializer, Scor
         registry.registerFor(MobEntity.class, CurableEntityComponent.KEY, SimpleCurableEntityComponent::new);
         registry.registerFor(ZombieVillagerEntity.class, CurableEntityComponent.KEY, DelegatingCurableEntityComponent::new);
         registry.registerFor(ZombifiedPiglinEntity.class, CurableEntityComponent.KEY, CurableZombifiedPiglinComponent::new);
+        registry.registerFor(LivingEntity.class, EntityAiToggle.KEY, EntityAiToggle::new);
     }
 
     @Override
